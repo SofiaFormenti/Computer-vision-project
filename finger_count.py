@@ -1,11 +1,34 @@
-# finger_count.py
 import cv2
 import time
 import mediapipe as mp
 
+"""
+The following code aims at leveraging the Gesture Recognizer of Mediapipe Solutions, an open source Google project
+that operates on image data with a machine learning (ML) model, and accepts either static data or a continuous stream. 
+The task outputs hand landmarks in image coordinates, hand landmarks in world coordinates, handedness (left/right hand), 
+and the hand gesture categories of multiple hands.
+
+In this case the output needed is a customized one, since the objective is to recognize the hand and the fingers of both
+left and right hand. 
+
+The class FingerCounter is a five-state state machine that uses MediaPipe to detect hand gestures and count fingers for 
+a two-stage selection interface (instrument -> track)
+"""
+
+
+
 class FingerCounter:
 
-    # States
+    """
+    5 states:
+    0 -> waits for the closed hand to activate
+    1 -> waits for user to select fingers to choose the instrument
+    2 -> waits for closed fist to confirm instrument
+    3 -> waits for user to select fingers to choose the track
+    4 -> waits for closed fist to confirm track
+    The arrival at the forth state makes the track start playing
+    """
+
     WAITING_HAND_READY = 0
     WAITING_FOR_SETTING = 1
     WAITING_FOR_SETTING_CONFIRM = 2
@@ -15,49 +38,75 @@ class FingerCounter:
     def __init__(self, on_selection):
         self.on_selection = on_selection
 
-        self.state = self.WAITING_HAND_READY
-        self.selected_setting = None
-        self.selected_option = None
+        self.state = self.WAITING_HAND_READY    # initialize state machine with 1st state
+        self.selected_setting = None            # stores the instrument number
+        self.selected_option = None             # stores the track number
 
-        # MediaPipe
-        self.mp_hands = mp.solutions.hands
-        self.mp_draw = mp.solutions.drawing_utils
-        self.hands = self.mp_hands.Hands(
+        self.mp_hands = mp.solutions.hands          # Mediapipe for hand detection
+        self.mp_draw = mp.solutions.drawing_utils   # Mediapipe for visual hand landmarks
+        self.hands = self.mp_hands.Hands(           # create hand detector (2 hands + confidence level 70%)
             max_num_hands=2,
             min_detection_confidence=0.7,
             min_tracking_confidence=0.7
         )
 
-        # Stability filtering
+        """
+        Stabilization filtering to prevent jitter readings
+        The stabilization filter is key to making this usable
+        -> prevents accidental selections from brief hand movements, without it the program is inconsistent
+        """
         self.last_finger_count = None
         self.last_change_time = time.time()
-        self.STABLE_TIME = 0.25   # how long the finger must remain stable
+        self.STABLE_TIME = 0.25   # time in sec for a reading to be considered valid
 
-    # -------------------------------------------------------
-    # FINGER COUNTING
-    # -------------------------------------------------------
+
+    """
+    Finger counting
+    
+    args: 
+        - lm := Mediapipe hand landmarks
+        - label := right or left to indicate which hand
+
+    returns:
+        integer count od extended fingers 
+    """
+
     def count_fingers(self, lm, label):
-        tips = [4, 8, 12, 16, 20]
-        fingers = []
+        tips = [4, 8, 12, 16, 20]       # landmark indices for fingertips (order: thumb -> index -> middle -> ring -> pinky)
+        fingers = []                    # stores boolean values (true/false) to see whether each finger is extended 
 
-        # Thumb
+        
+        """
+        Thumb detection - logic is different if left or right hand
+        -> right thumb is extended if the tip is to the left of the joint below it
+        -> left thumb if tip to the right of joint below it
+        """
+
         if label == "Right":
             fingers.append(lm.landmark[tips[0]].x < lm.landmark[tips[0] - 1].x)
         else:
             fingers.append(lm.landmark[tips[0]].x > lm.landmark[tips[0] - 1].x)
 
-        # Other fingers
+        # For the other fingers the finger is extended if the tip is above the joint 2 positions below it comparing y coords (lower y is higher on the screen)
         for i in range(1, 5):
             fingers.append(lm.landmark[tips[i]].y < lm.landmark[tips[i] - 2].y)
 
-        return fingers.count(True)
+        return fingers.count(True)      # number of extended fingers
 
     def is_hand_closed(self, n):
         return n == 0
 
-    # -------------------------------------------------------
-    # STABILIZATION FILTER
-    # -------------------------------------------------------
+
+    """
+    Stabilization filter -> filters the raw finger count to only return stable 
+    readings preventing accidental triggers from brief finger movements.
+        
+    Args:
+        raw_count: The current raw finger count from detection
+            
+    Returns:
+        The stable finger count if held long enough, None otherwise
+    """
     def get_stable_finger_count(self, raw_count):
         current_time = time.time()
 
@@ -69,11 +118,9 @@ class FingerCounter:
         if current_time - self.last_change_time > self.STABLE_TIME:
             return self.last_finger_count
 
-        return None  # still stabilizing
+        return None  # if not stable yet return None, still stabilizing
 
-    # -------------------------------------------------------
-    # MAIN LOOP
-    # -------------------------------------------------------
+
     def run(self):
         cap = cv2.VideoCapture(0)
 
@@ -82,15 +129,14 @@ class FingerCounter:
             if not ok:
                 break
 
-            frame = cv2.flip(frame, 1)
-            rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            results = self.hands.process(rgb)
+            frame = cv2.flip(frame, 1)                          # flip for mirror effect
+            rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)        # convert from BGR (OpenCV default) to RGB (MediaPipe requirement)
+            results = self.hands.process(rgb)                   # process with Mediapipe to detect hands
 
-            right_count_raw = None
+            right_count_raw = None                              # initialize variable to store right hand finger count for this frame
 
-            # -------------------------------------------
-            # HAND DETECTION
-            # -------------------------------------------
+            
+            # check if any hands where detected, loop through them, get the label indicating whether its L or R
             if results.multi_hand_landmarks:
                 for lm, handed in zip(results.multi_hand_landmarks, results.multi_handedness):
                     label = handed.classification[0].label
@@ -100,16 +146,13 @@ class FingerCounter:
 
                     self.mp_draw.draw_landmarks(frame, lm, self.mp_hands.HAND_CONNECTIONS)
 
-            # -------------------------------------------
-            # APPLY STABILIZATION FILTER
-            # -------------------------------------------
+            # apply stabilization filter
             stable_count = None
             if right_count_raw is not None:
                 stable_count = self.get_stable_finger_count(right_count_raw)
 
-            # -------------------------------------------
-            # STATE MACHINE LOGIC
-            # -------------------------------------------
+
+            # state machine logic
             if stable_count is not None:
                 # -----------------------------
                 # STATE 0 — WAIT FOR CLOSED HAND (ACTIVATE)
@@ -167,19 +210,20 @@ class FingerCounter:
                     if self.is_hand_closed(stable_count):
                         print(f"Track {self.selected_option} confirmed!")
 
-                        # final callback
+                        # call callback function with both selections
                         self.on_selection(self.selected_setting, self.selected_option)
 
-                        # reset
+                        # reset state machine to initial state
                         self.state = self.WAITING_HAND_READY
                         self.selected_setting = None
                         self.selected_option = None
 
-            # Display finger count
+            # Display unfiltered finger count on screen if detected
             if right_count_raw is not None:
                 cv2.putText(frame, f"Right hand (raw): {right_count_raw}",
                             (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,255), 2)
 
+            # Display the filtered finger count on screen (if available)
             if stable_count is not None:
                 cv2.putText(frame, f"Stable fingers: {stable_count}",
                             (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (100,255,100), 2)
