@@ -20,7 +20,12 @@ a two-stage selection interface (instrument -> track)
 class FingerCounter:
 
     """
-    5 states:
+    Detects and processes both hands
+    - RIGHT : track selection (state machine)
+    - LEFT : effect control
+
+
+    5 states for the right hand:
     0 -> waits for the closed hand to activate
     1 -> waits for user to select fingers to choose the instrument
     2 -> waits for closed fist to confirm instrument
@@ -35,8 +40,9 @@ class FingerCounter:
     WAITING_FOR_OPTION = 3
     WAITING_FOR_OPTION_CONFIRM = 4
 
-    def __init__(self, on_selection):
+    def __init__(self, on_selection, left_hand_controller = None):
         self.on_selection = on_selection
+        self.left_hand_controller = left_hand_controller
 
         self.state = self.WAITING_HAND_READY    # initialize state machine with 1st state
         self.selected_setting = None            # stores the instrument number
@@ -119,9 +125,95 @@ class FingerCounter:
             return self.last_finger_count
 
         return None  # if not stable yet return None, still stabilizing
+    
+    # -------------------------------------------------------
+    # DISPLAY HELPERS
+    # -------------------------------------------------------
+    def draw_right_hand_ui(self, frame, stable_count):
+        """Draw UI elements for right hand state machine."""
+        # State-specific instructions
+        if self.state == self.WAITING_HAND_READY:
+            cv2.putText(frame, "RIGHT: Show CLOSED hand to activate",
+                        (10, 440), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0,200,255), 2)
+
+        elif self.state == self.WAITING_FOR_SETTING:
+            cv2.putText(frame, "RIGHT: Raise fingers for INSTRUMENT",
+                        (10, 440), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0,255,0), 2)
+
+        elif self.state == self.WAITING_FOR_SETTING_CONFIRM:
+            cv2.putText(frame, f"RIGHT: Close to confirm Instrument {self.selected_setting}",
+                        (10, 440), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (50,255,50), 2)
+
+        elif self.state == self.WAITING_FOR_OPTION:
+            cv2.putText(frame, "RIGHT: Raise fingers for TRACK",
+                        (10, 440), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,200,0), 2)
+
+        elif self.state == self.WAITING_FOR_OPTION_CONFIRM:
+            cv2.putText(frame, f"RIGHT: Close to confirm Track {self.selected_option}",
+                        (10, 440), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,150,0), 2)
+
+        # Show stable finger count
+        if stable_count is not None:
+            cv2.putText(frame, f"RIGHT stable: {stable_count}",
+                        (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (100,255,100), 2)
+
+    def draw_left_hand_ui(self, frame, left_count):
+        """Draw UI elements for left hand effect control."""
+        if self.left_hand_controller is None:
+            return
+        
+        # Get display info from left hand controller
+        info = self.left_hand_controller.get_display_info()
+        
+        # Draw left hand finger count
+        cv2.putText(frame, f"LEFT fingers: {left_count}",
+                    (10, 110), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,100), 2)
+        
+        # Draw current effect mode and value
+        if info['active']:
+            mode_text = f"LEFT MODE: {info['mode']} (Track {info['track']})"
+            cv2.putText(frame, mode_text,
+                        (10, 150), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,100,255), 2)
+            
+            # Draw value
+            if info['mode'] == 'FILTER':
+                value_text = f"Value: {info['value']:.0f} Hz"
+            elif info['mode'] in ['VOLUME', 'REVERB']:
+                value_text = f"Value: {info['value']:.0%}"
+            else:  # SPEED
+                value_text = f"Value: {info['value']:.2f}x"
+            
+            cv2.putText(frame, value_text,
+                        (10, 190), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,100,255), 2)
+            
+            # Draw progress bar
+            bar_x = 10
+            bar_y = 210
+            bar_width = 300
+            bar_height = 20
+            
+            # Background
+            cv2.rectangle(frame, (bar_x, bar_y), 
+                         (bar_x + bar_width, bar_y + bar_height), 
+                         (50, 50, 50), -1)
+            
+            # Filled portion
+            fill_width = int((info['percentage'] / 100) * bar_width)
+            cv2.rectangle(frame, (bar_x, bar_y), 
+                         (bar_x + fill_width, bar_y + bar_height), 
+                         (255, 100, 255), -1)
+            
+            # Border
+            cv2.rectangle(frame, (bar_x, bar_y), 
+                         (bar_x + bar_width, bar_y + bar_height), 
+                         (255, 255, 255), 2)
 
 
+    # -------------------------------------------------------
+    # MAIN LOOP
+    # -------------------------------------------------------
     def run(self):
+        """Main loop: capture video, process both hands."""
         cap = cv2.VideoCapture(0)
 
         while True:
@@ -129,107 +221,110 @@ class FingerCounter:
             if not ok:
                 break
 
-            frame = cv2.flip(frame, 1)                          # flip for mirror effect
-            rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)        # convert from BGR (OpenCV default) to RGB (MediaPipe requirement)
-            results = self.hands.process(rgb)                   # process with Mediapipe to detect hands
+            frame = cv2.flip(frame, 1)
+            rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            results = self.hands.process(rgb)
 
-            right_count_raw = None                              # initialize variable to store right hand finger count for this frame
+            # Initialize hand data for this frame
+            right_count_raw = None
+            left_count_raw = None
+            left_landmarks = None
 
-            
-            # check if any hands where detected, loop through them, get the label indicating whether its L or R
+            # -------------------------------------------
+            # HAND DETECTION
+            # -------------------------------------------
             if results.multi_hand_landmarks:
                 for lm, handed in zip(results.multi_hand_landmarks, results.multi_handedness):
                     label = handed.classification[0].label
 
+                    # Process RIGHT hand (track selection)
                     if label == "Right":
                         right_count_raw = self.count_fingers(lm, "Right")
 
+                    # Process LEFT hand (effect control)
+                    elif label == "Left":
+                        left_count_raw = self.count_fingers(lm, "Left")
+                        left_landmarks = lm
+
+                    # Draw landmarks for both hands
                     self.mp_draw.draw_landmarks(frame, lm, self.mp_hands.HAND_CONNECTIONS)
 
-            # apply stabilization filter
+            # -------------------------------------------
+            # RIGHT HAND: STATE MACHINE LOGIC
+            # -------------------------------------------
             stable_count = None
             if right_count_raw is not None:
                 stable_count = self.get_stable_finger_count(right_count_raw)
 
-
-            # state machine logic
             if stable_count is not None:
-                # -----------------------------
-                # STATE 0 — WAIT FOR CLOSED HAND (ACTIVATE)
-                # -----------------------------
+                # STATE 0: Wait for closed hand
                 if self.state == self.WAITING_HAND_READY:
-                    cv2.putText(frame, "Show CLOSED right hand to activate",
-                                (10, 440), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,200,255), 2)
-
                     if self.is_hand_closed(stable_count):
                         print("Right hand ready.")
                         self.state = self.WAITING_FOR_SETTING
 
-                # -----------------------------
-                # STATE 1 — SELECT SETTING
-                # -----------------------------
+                # STATE 1: Select instrument
                 elif self.state == self.WAITING_FOR_SETTING:
-                    cv2.putText(frame, "Raise fingers to choose INSTRUMENT",
-                                (10, 440), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,255,0), 2)
-
                     if stable_count > 0:
                         self.selected_setting = stable_count
                         print(f"Instrument selected: {self.selected_setting}")
                         self.state = self.WAITING_FOR_SETTING_CONFIRM
 
-                # -----------------------------
-                # STATE 2 — CONFIRM SETTING
-                # -----------------------------
+                # STATE 2: Confirm instrument
                 elif self.state == self.WAITING_FOR_SETTING_CONFIRM:
-                    cv2.putText(frame, "Close hand to CONFIRM instrument",
-                                (10, 440), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (50,255,50), 2)
-
                     if self.is_hand_closed(stable_count):
                         print(f"Instrument {self.selected_setting} confirmed.")
                         self.state = self.WAITING_FOR_OPTION
 
-                # -----------------------------
-                # STATE 3 — SELECT OPTION
-                # -----------------------------
+                # STATE 3: Select track
                 elif self.state == self.WAITING_FOR_OPTION:
-                    cv2.putText(frame, "Raise fingers to choose TRACK",
-                                (10, 440), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255,200,0), 2)
-
                     if stable_count > 0:
                         self.selected_option = stable_count
                         print(f"Track selected: {self.selected_option}")
                         self.state = self.WAITING_FOR_OPTION_CONFIRM
 
-                # -----------------------------
-                # STATE 4 — CONFIRM OPTION
-                # -----------------------------
+                # STATE 4: Confirm track
                 elif self.state == self.WAITING_FOR_OPTION_CONFIRM:
-                    cv2.putText(frame, "Close hand to CONFIRM track",
-                                (10, 440), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255,150,0), 2)
-
                     if self.is_hand_closed(stable_count):
                         print(f"Track {self.selected_option} confirmed!")
-
-                        # call callback function with both selections
+                        
+                        # Callback for track selection
                         self.on_selection(self.selected_setting, self.selected_option)
-
-                        # reset state machine to initial state
+                        
+                        # Update left hand controller to control this track
+                        if self.left_hand_controller:
+                            self.left_hand_controller.set_active_track(self.selected_option)
+                        
+                        # Reset state machine
                         self.state = self.WAITING_HAND_READY
                         self.selected_setting = None
                         self.selected_option = None
 
-            # Display unfiltered finger count on screen if detected
+            # -------------------------------------------
+            # LEFT HAND: EFFECT CONTROL
+            # -------------------------------------------
+            if self.left_hand_controller and left_landmarks and left_count_raw:
+                # Process pinch gesture for effect control
+                self.left_hand_controller.process_pinch(left_landmarks, left_count_raw)
+
+            # -------------------------------------------
+            # DRAW UI
+            # -------------------------------------------
+            # Right hand UI
             if right_count_raw is not None:
-                cv2.putText(frame, f"Right hand (raw): {right_count_raw}",
+                cv2.putText(frame, f"RIGHT raw: {right_count_raw}",
                             (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,255), 2)
+            
+            self.draw_right_hand_ui(frame, stable_count)
+            
+            # Left hand UI
+            if left_count_raw is not None:
+                self.draw_left_hand_ui(frame, left_count_raw)
 
-            # Display the filtered finger count on screen (if available)
-            if stable_count is not None:
-                cv2.putText(frame, f"Stable fingers: {stable_count}",
-                            (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (100,255,100), 2)
+            # Show frame
+            cv2.imshow("Dual Hand Controller", frame)
 
-            cv2.imshow("Hand Selector", frame)
-
+            # Quit on 'q'
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
 
