@@ -1,4 +1,4 @@
-<div align="center">ù
+<div align="center">
   
 # Real Time Interactive DJ set 
 
