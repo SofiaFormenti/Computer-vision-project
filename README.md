@@ -24,20 +24,20 @@ This project aims to use hand recognition to make real time dj-set by converting
 
 ```
 Computer-vision-project/
-├── Hand recognition.py             # opencv implementation
+├── Hand recognition.py             # opencv implementation, run this file for the convex hull implementation
 ├── audio_player.py
-├── finger_count.py
-├── left_hand_controller.py
-├──main.py
-├──pd_sender.py
-├──prog_test.pd
-├──requirements.txt
-├──test.pd
+├── finger_count.py                 # Right hand instrument and track selection
+├── left_hand_controller.py         # Left hand Effects controller with pinch
+├── main.py                         # run this for the Mediapipe implementation
+├── pd_sender.py
+├── prog_test.pd
+├── requirements.txt
+├── test.pd
 ├── __pycache__/
 │   ├── finger_count.cpython-312.pyc 
 │   ├── left_hand_controller.cpython-312.py
 │   └── pd_sender.cpython-312.pyc
-├── samples/
+└── samples/
    ├── funkydrum.wav
    ├── instr1_bass1.wav
    └── instr1_bass2.wav
@@ -53,3 +53,8 @@ Computer-vision-project/
    └──jazz-drums-loop.wav
 
 ```
+
+
+## Key Features
+
+- **Interactivity**: 
