@@ -38,18 +38,18 @@ Computer-vision-project/
 │   ├── left_hand_controller.cpython-312.py
 │   └── pd_sender.cpython-312.pyc
 ├── samples/
-│   ├── funkydrum.wav
-│   ├── instr1_bass1.wav
-│   └── instr1_bass2.wav
-│   └──instr1_bass3.wav
-│   └──instr1_bass4.wav
-│   └──instr2_drum1.wav
-│   └──instr2_drum2.wav
-│   └──instr2_drum3.wav
-│   └──instr2_drum4.wav
-│   └──instr3_piano1.wav
-│   └──instr3_piano2.wav
-│   └──instr3_piano3.wav
-│   └──jazz-drums-loop.wav
+   ├── funkydrum.wav
+   ├── instr1_bass1.wav
+   └── instr1_bass2.wav
+   └──instr1_bass3.wav
+   └──instr1_bass4.wav
+   └──instr2_drum1.wav
+   └──instr2_drum2.wav
+   └──instr2_drum3.wav
+   └──instr2_drum4.wav
+   └──instr3_piano1.wav
+   └──instr3_piano2.wav
+   └──instr3_piano3.wav
+   └──jazz-drums-loop.wav
 
 ```
