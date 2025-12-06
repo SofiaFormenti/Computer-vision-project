@@ -9,19 +9,57 @@ from left_hand_controller import LeftHandController
 from pd_sender import PdSender
 
 # -----------------------------
-# INITIALIZE
+# PD VERSION 2
 # -----------------------------
+from audio_player import AudioPlayer
+import audio_player
+print(">>> MAIN IMPORTED AUDIO_PLAYER FROM:", audio_player.__file__)
 
+
+pd=PdSender()
+audio= AudioPlayer()
+
+left_controller = LeftHandController(pd_sender=pd, active_track=1)
+
+def on_selection(setting, option):
+    print(f"\n{'='*50}")
+    print(f"TRACK SELECTED: Instrument {setting}, Track {option}")
+    print(f"{'='*50}\n")
+
+    # Stop ONLY the loop corresponding to this instrument/track (if exists)
+    audio.stop_loop(setting, option)
+
+    # Start the selected instrument & track
+    audio.play_loop(setting, option) ## REMETTRE CA SI JAMAIS CA bug
+    
+
+    # Send selection to Pure Data (optional)
+    pd.send_selection(setting, option)
+
+    # Update effect controller for this track
+    left_controller.set_active_track(option)
+
+
+
+
+
+
+
+
+
+# -----------------------------
+# PD WHOLE VERSION 1
+# -----------------------------
 # Create Pure Data OSC sender
-pd = PdSender()
+#pd = PdSender()
 
 # Create left hand controller for effect control
-left_controller = LeftHandController(pd_sender=pd, active_track=1)
+#left_controller = LeftHandController(pd_sender=pd, active_track=1)
 
 # -----------------------------
 # TRACK SELECTION CALLBACK (Right Hand)
 # -----------------------------
-def on_selection(setting, option):
+#def on_selection(setting, option):
     """
     Called when user confirms instrument + track selection with right hand.
     
@@ -29,15 +67,15 @@ def on_selection(setting, option):
         setting: Instrument number (1-5)
         option: Track number (1-5)
     """
-    print(f"\n{'='*50}")
-    print(f"TRACK SELECTED: Instrument {setting}, Track {option}")
-    print(f"{'='*50}\n")
+    #print(f"\n{'='*50}")
+    #print(f"TRACK SELECTED: Instrument {setting}, Track {option}")
+    #print(f"{'='*50}\n")
     
     # Send selection to Pure Data
-    pd.send_selection(setting, option)
+    #pd.send_selection(setting, option)
     
     # Update left hand controller to control this track
-    left_controller.set_active_track(option)
+    #left_controller.set_active_track(option)
 
 # -----------------------------
 # RUN THE APPLICATION
@@ -64,3 +102,6 @@ if __name__ == "__main__":
         left_hand_controller=left_controller
     )
     fc.run()
+
+import os
+print("Répertoire de travail :", os.getcwd())
