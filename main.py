@@ -6,6 +6,7 @@ Main script for dual-hand gesture control:
 
 from finger_count import FingerCounter
 from left_hand_controller import LeftHandController
+#from simplified_left_hand_controller import SimpleLeftHandController
 from pd_sender import PdSender
 
 # -----------------------------
@@ -20,11 +21,13 @@ pd=PdSender()
 audio= AudioPlayer()
 
 left_controller = LeftHandController(pd_sender=pd, active_track=1)
+#left_controller = SimpleLeftHandController(pd_sender=pd, active_track=1)
 
 def on_selection(setting, option):
     print(f"\n{'='*50}")
     print(f"TRACK SELECTED: Instrument {setting}, Track {option}")
     print(f"{'='*50}\n")
+    print("on_selection() WAS CALLED")
 
     # Stop ONLY the loop corresponding to this instrument/track (if exists)
     audio.stop_loop(setting, option)
@@ -35,7 +38,7 @@ def on_selection(setting, option):
 
     # Send selection to Pure Data (optional)
     pd.send_selection(setting, option)
-
+    
     # Update effect controller for this track
     left_controller.set_active_track(option)
 
