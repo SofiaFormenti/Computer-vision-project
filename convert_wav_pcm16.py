@@ -12,7 +12,7 @@ print("Dossier scanné :", os.path.abspath(SAMPLES_DIR))
 print("------------------------------------")
 
 if not os.path.exists(FFMPEG):
-    print("❌ ERREUR : ffmpeg introuvable :", FFMPEG)
+    print(" ERREUR : ffmpeg introuvable :", FFMPEG)
     print("Corrige le chemin avant d exécuter.")
     exit()
 

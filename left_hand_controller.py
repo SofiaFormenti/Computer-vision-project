@@ -17,8 +17,8 @@ class LeftHandController:
     # Effect parameter ranges
     EFFECT_RANGES = {
         MODE_VOLUME: (0.0, 1.0),        # 0-100% as 0.0-1.0
-        MODE_FILTER: (200, 8000),        # 200Hz - 8000Hz
-        MODE_REVERB: (0.0, 1.0),         # 0-100% wet
+        MODE_FILTER: (200, 10000),        # 200Hz - 8000Hz
+        MODE_REVERB: (20.0, 40.0),         # 0-100% wet
         MODE_SPEED: (0.5, 2.0)           # 0.5x - 2.0x speed
     }
     
