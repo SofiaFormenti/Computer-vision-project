@@ -6,6 +6,7 @@ CSC_51073_EP class of Computer vision 2025
 
 This project aims to use hand recognition to make real time dj-set by converting to MIDI.
 
+ ‼️Work in progress‼️
 
 </div>
 
@@ -53,6 +54,47 @@ Computer-vision-project/
    └──jazz-drums-loop.wav
 
 ```
+
+
+## Track Overview
+
+
+## 🎹 Instrument 1 — Track 1
+
+**Mood:** Dreamlike  
+**BPM:** 78  
+**Tags:** ambient, soft, floaty  
+**Description:**  
+A gentle atmospheric pad designed to create a dreamy, floating texture.
+
+---
+
+## 🥁 Instrument 2 — Track 1
+
+**Mood:** Energetic  
+**BPM:** 95  
+**Tags:** jazz, drums, rhythm  
+**Description:**  
+Jazz-style drum loop with light swing, suitable for layering under ambient pads.
+
+
+## Instruments
+
+### 🎹 Instrument 1 — Pads
+| Track | Mood       | Notes               |
+|-------|------------|---------------------|
+| 1     | Dreamlike  | Soft evolving pads  |
+| 2     | Ambient    | Long reverb tail    |
+
+### 🥁 Instrument 2 — Drums
+| Track | Mood       | Notes               |
+|-------|------------|---------------------|
+| 1     | Energetic  | Jazz drum loop      |
+
+### 🎸 Instrument 3 — Bass
+| Track | Mood       | Notes               |
+|-------|------------|---------------------|
+| 1     | Dark       | Synth bass line     |
 
 
 ## Key Features
