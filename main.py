@@ -23,22 +23,30 @@ audio= AudioPlayer()
 left_controller = LeftHandController(pd_sender=pd, active_track=1)
 #left_controller = SimpleLeftHandController(pd_sender=pd, active_track=1)
 
+# --- NEW: Keep track of which tracks are currently playing ---
+active_tracks = set() # e.g., {(1, 2), (3, 4)}
+
 def on_selection(setting, option):
     print(f"\n{'='*50}")
     print(f"TRACK SELECTED: Instrument {setting}, Track {option}")
     print(f"{'='*50}\n")
-    print("on_selection() WAS CALLED")
 
-    # Stop ONLY the loop corresponding to this instrument/track (if exists)
-    audio.stop_loop(setting, option)
+    key = (setting, option)
 
-    # Start the selected instrument & track
-    audio.play_loop(setting, option) ## REMETTRE CA SI JAMAIS CA bug
-    
+    # --- NEW: Toggle the track's playback state ---
+    if key in active_tracks:
+        # If track is already playing, stop it and remove it from the set
+        print(f"Toggling OFF: Instrument {setting}, Track {option}")
+        audio.stop_loop(setting, option)
+        active_tracks.remove(key)
+    else:
+        # If track is not playing, start it and add it to the set
+        print(f"Toggling ON: Instrument {setting}, Track {option}")
+        audio.play_loop(setting, option)
+        active_tracks.add(key)
 
     # Send selection to Pure Data (optional)
     pd.send_selection(setting, option)
-    
     # Update effect controller for this track
     left_controller.set_active_track(option)
 
