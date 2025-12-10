@@ -4,7 +4,7 @@
 
 CSC_51073_EP class of Computer vision 2025 
 
-This project aims to use hand recognition to make real time dj-set by converting to MIDI.
+This project aims to use hand recognition to make real time dj-set effects by using samples.
 
  ‼️Work in progress‼️
 
@@ -12,13 +12,14 @@ This project aims to use hand recognition to make real time dj-set by converting
 
 ## Features
 
-| Gesture | Action |
+| Hand | Gesture | 
 |---------|--------|
-| ✋ Left Hand | 
+|  Left Hand |  Effects control (lowpass, reverb, volume)
 | 🤏 Pinch & Drag | Change Amplitude of effect |
-| Right Hand ✋|
+| Right Hand |  Instrument and Track choice
+| ✌️ Finger indication | Select Instrument and Track number |
 | ✊ Closed Fist | Confirm Selection |
-| ✌️ Finger indication | Select Instrument and Tracks |
+
 
 
 ## Architecture
@@ -39,59 +40,99 @@ Computer-vision-project/
 │   ├── left_hand_controller.cpython-312.py
 │   └── pd_sender.cpython-312.pyc
 └── samples/
-   ├── funkydrum.wav
-   ├── instr1_bass1.wav
-   └── instr1_bass2.wav
-   └──instr1_bass3.wav
-   └──instr1_bass4.wav
+   ├──instr1_piano1.wav
+   ├──instr1_piano2.wav
+   └──instr1_piano3.wav
+   └──instr1_piano4.wav
    └──instr2_drum1.wav
    └──instr2_drum2.wav
    └──instr2_drum3.wav
    └──instr2_drum4.wav
-   └──instr3_piano1.wav
-   └──instr3_piano2.wav
-   └──instr3_piano3.wav
-   └──jazz-drums-loop.wav
-
+   └──instr3_bass1.wav
+   └──instr3_bass2.wav
 ```
-
 
 ## Track Overview
 
 
-## 🎹 Instrument 1 — Track 1
+## Instrument 1 - Piano 
 
-**Mood:** Dreamlike  
-**BPM:** 78  
+**Track 1:** Ambiant chords  
+**BPM:** 120  
 **Tags:** ambient, soft, floaty  
-**Description:**  
-A gentle atmospheric pad designed to create a dreamy, floating texture.
+
+**Track 2:** Arpeggio  
+**BPM:** 120  
+**Tags:** - 
+
+**Track 3:** Ambiant chords  
+**BPM:** 120  
+**Tags:** -
+
+**Track 4:** Ambiant chords  
+**BPM:** 120  
+**Tags:** -
 
 ---
 
-## 🥁 Instrument 2 — Track 1
+##  Instrument 2 - Drums
 
-**Mood:** Energetic  
+**Track 1:** Energetic  
 **BPM:** 95  
-**Tags:** jazz, drums, rhythm  
+**Tags:** drums, rhythm  
 **Description:**  
 Jazz-style drum loop with light swing, suitable for layering under ambient pads.
+
+**Track 2:** Energetic  
+**BPM:** 95  
+**Tags:** drums, rhythm  
+**Description:**  
+
+
+**Track 3:** Energetic  
+**BPM:** 95  
+**Tags:** drums, rhythm  
+**Description:**  
+
+
+**Track 4:** Energetic  
+**BPM:** 95  
+**Tags:** drums, rhythm  
+**Description:**  
+
+
+---
+
+##  Instrument 3 - bass
+
+**Track 1:** Energetic  
+**BPM:** 95  
+**Tags:** drums, rhythm  
+**Description:** 
+
+
+**Track 2:** Energetic  
+**BPM:** 95  
+**Tags:** drums, rhythm  
+**Description:**  
+
 
 
 ## Instruments
 
-### 🎹 Instrument 1 — Pads
-| Track | Mood       | Notes               |
+###  Instrument 1 — Pads
+| Track | Ambiance       | Description              |
 |-------|------------|---------------------|
 | 1     | Dreamlike  | Soft evolving pads  |
 | 2     | Ambient    | Long reverb tail    |
+| 3     |Arpeggio    | Looping 
 
-### 🥁 Instrument 2 — Drums
+###  Instrument 2 — Drums
 | Track | Mood       | Notes               |
 |-------|------------|---------------------|
-| 1     | Energetic  | Jazz drum loop      |
+| 1     | Energetic  | Synth bass line     |
 
-### 🎸 Instrument 3 — Bass
+###  Instrument 3 — Bass
 | Track | Mood       | Notes               |
 |-------|------------|---------------------|
 | 1     | Dark       | Synth bass line     |
