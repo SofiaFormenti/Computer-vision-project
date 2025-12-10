@@ -51,7 +51,23 @@ def on_selection(setting, option):
     left_controller.set_active_track(option)
 
 
+def restart_simulation():
+    """Stops all audio and resets all controllers to their initial state."""
+    print("\n" + "="*20 + " RESTARTING SIMULATION " + "="*20 + "\n")
+    # Stop all playing audio tracks
+    audio.stop_all_loops()
+    active_tracks.clear()
 
+    # Reset the left hand controller
+    left_controller.reset()
+    
+    # Reset the right hand controller (state machine)
+    # The FingerCounter instance 'fc' is not available here, so we need it to reset itself.
+    # We will call a reset method on it from within its class on restart trigger.
+    fc.reset()
+
+# -----------------------------
+# PD WHOLE VERSION 1
 
 
 
@@ -106,10 +122,12 @@ if __name__ == "__main__":
     print("  - 5 fingers: Playback speed control")
     print("  - Pinch thumb+index: Adjust effect value")
     print("\nPress 'q' to quit\n")
+    print("Click the 'RESTART' button in the top-right to reset everything.")
     
     # Create and run finger counter with both hands
     fc = FingerCounter(
         on_selection=on_selection,
+        on_restart=restart_simulation,
         left_hand_controller=left_controller
     )
     fc.run()

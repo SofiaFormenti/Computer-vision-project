@@ -65,6 +65,23 @@ class AudioPlayer:
             print(f"Stopping loop {key}")
             self.stop_flags[key] = True
 
+    # ---------------------
+    # STOP ALL LOOPS
+    # ---------------------
+    def stop_all_loops(self):
+        """Stop all currently playing loops."""
+        print("Stopping all audio loops...")
+        # Create a copy of the keys to iterate over, as we'll be modifying the dict
+        active_loop_keys = list(self.active_loops.keys())
+        for key in active_loop_keys:
+            self.stop_loop(key[0], key[1])
+        
+        # Wait for all threads to finish
+        for key in active_loop_keys:
+            if key in self.active_loops and self.active_loops[key].is_alive():
+                self.active_loops[key].join() # Wait for the thread to terminate
+
+        self.active_loops.clear()
 
     # ---------------------
     # PLAY LOOP
@@ -100,5 +117,3 @@ class AudioPlayer:
 
         self.active_loops[key] = th
         print(f"✔ Loop active: {key}")
-
-
