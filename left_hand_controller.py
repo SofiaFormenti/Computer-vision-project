@@ -59,6 +59,16 @@ class LeftHandController:
         self.active_track = track_number
         print(f"Left hand now controlling Track {track_number}")
     
+    def reset(self):
+        """Reset the controller to its initial state."""
+        self.current_mode = None
+        self.last_pinch_value = None
+        self.last_send_time = 0
+        self.pinch_history.clear()
+        self.active_track = 1 # Or a default track
+        print("Left hand controller has been reset.")
+
+
     def detect_pinch_distance(self, landmarks):
         """
         Calculate Euclidean distance between thumb tip and index finger tip.

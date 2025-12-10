@@ -40,9 +40,10 @@ class FingerCounter:
     WAITING_FOR_OPTION = 3
     WAITING_FOR_OPTION_CONFIRM = 4
 
-    def __init__(self, on_selection, left_hand_controller = None):
+    def __init__(self, on_selection, on_restart, left_hand_controller = None):
         self.on_selection = on_selection
         self.left_hand_controller = left_hand_controller
+        self.on_restart = on_restart
 
         self.state = self.WAITING_HAND_READY    # initialize state machine with 1st state
         self.selected_setting = None            # stores the instrument number
@@ -65,6 +66,15 @@ class FingerCounter:
         self.last_change_time = time.time()
         self.STABLE_TIME = 0.25   # time in sec for a reading to be considered valid
 
+        # Restart button properties
+        self.RESTART_BUTTON_RECT = (680, 10, 110, 40) # x, y, w, h
+
+    def reset(self):
+        """Resets the state machine for the right hand."""
+        print("Resetting right hand state machine.")
+        self.state = self.WAITING_HAND_READY
+        self.selected_setting = None
+        self.selected_option = None
 
     """
     Finger counting
@@ -208,12 +218,30 @@ class FingerCounter:
                          (bar_x + bar_width, bar_y + bar_height), 
                          (255, 255, 255), 2)
 
+    def draw_restart_button(self, frame):
+        """Draws the restart button on the frame."""
+        x, y, w, h = self.RESTART_BUTTON_RECT
+        cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 200), -1)
+        cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 255, 255), 2)
+        cv2.putText(frame, "RESTART", (x + 10, y + 28),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
+
+    def mouse_callback(self, event, x, y, flags, param):
+        """Handles mouse click events to check for restart button press."""
+        if event == cv2.EVENT_LBUTTONDOWN:
+            rx, ry, rw, rh = self.RESTART_BUTTON_RECT
+            if rx <= x <= rx + rw and ry <= y <= ry + rh:
+                print("Restart button clicked!")
+                self.on_restart()
+
 
     # -------------------------------------------------------
     # MAIN LOOP
     # -------------------------------------------------------
     def run(self):
         """Main loop: capture video, process both hands."""
+        cv2.namedWindow("Dual Hand Controller")
+        cv2.setMouseCallback("Dual Hand Controller", self.mouse_callback)
         cap = cv2.VideoCapture(0)
 
         while True:
@@ -320,6 +348,9 @@ class FingerCounter:
             # Left hand UI
             if left_count_raw is not None:
                 self.draw_left_hand_ui(frame, left_count_raw)
+            
+            # Restart Button
+            self.draw_restart_button(frame)
 
             # Show frame
             cv2.imshow("Dual Hand Controller", frame)
