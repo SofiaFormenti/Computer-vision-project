@@ -220,11 +220,25 @@ class FingerCounter:
 
     def draw_restart_button(self, frame):
         """Draws the restart button on the frame."""
+        # Get frame dimensions to position button in the top-right
+        h_frame, w_frame, _ = frame.shape
+        
+        # Update button rectangle based on frame width
+        btn_w, btn_h = 110, 40
+        btn_x = w_frame - btn_w - 10 # 10px padding from the right edge
+        btn_y = 10                   # 10px padding from the top
+        self.RESTART_BUTTON_RECT = (btn_x, btn_y, btn_w, btn_h)
+
         x, y, w, h = self.RESTART_BUTTON_RECT
-        cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 200), -1)
-        cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 255, 255), 2)
-        cv2.putText(frame, "RESTART", (x + 10, y + 28),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
+
+        # Create a transparent overlay for the button
+        overlay = frame.copy()
+        cv2.rectangle(overlay, (x, y), (x + w, y + h), (0, 0, 180), -1) # Dark red background
+        cv2.addWeighted(overlay, 0.5, frame, 0.5, 0, frame) # Blend with 50% opacity
+
+        # Draw border and text on top of the blended rectangle
+        cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 255, 255), 2) # White border
+        cv2.putText(frame, "RESTART", (x + 10, y + 28), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
 
     def mouse_callback(self, event, x, y, flags, param):
         """Handles mouse click events to check for restart button press."""
