@@ -4,6 +4,8 @@
 
 CSC_51073_EP class of Computer vision 2025 
 
+By: Aline Baumberger and Sofia Formenti
+
 This project aims to use hand recognition to make real time dj-set effects by using samples.
 
  ‼️Work in progress‼️
@@ -118,24 +120,6 @@ Jazz-style drum loop with light swing, suitable for layering under ambient pads.
 
 
 
-## Instruments
-
-###  Instrument 1 — Pads
-| Track | Ambiance       | Description              |
-|-------|------------|---------------------|
-| 1     | Dreamlike  | Soft evolving pads  |
-| 2     | Ambient    | Long reverb tail    |
-| 3     |Arpeggio    | Looping 
-
-###  Instrument 2 — Drums
-| Track | Mood       | Notes               |
-|-------|------------|---------------------|
-| 1     | Energetic  | Synth bass line     |
-
-###  Instrument 3 — Bass
-| Track | Mood       | Notes               |
-|-------|------------|---------------------|
-| 1     | Dark       | Synth bass line     |
 
 
 ## Key Features
