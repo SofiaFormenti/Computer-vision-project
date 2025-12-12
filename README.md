@@ -4,6 +4,8 @@
 
 CSC_51073_EP class of Computer vision 2025 
 
+By: Aline Baumberger and Sofia Formenti
+
 This project aims to use hand recognition to make real time dj-set effects by using samples.
 
  ‼️Work in progress‼️
