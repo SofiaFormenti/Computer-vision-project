@@ -24,7 +24,7 @@ All the tracks you can choose from were made from scratch by Aline and Nathan! ð
 
 ## How to use
 
-Install the required libraries, [Pure Data](https://puredata.info/downloads) and [VB-Cable](https://vb-audio.com/Cable/). 
+Install the required libraries found in requirements.txt, [Pure Data](https://puredata.info/downloads) and [VB-Cable](https://vb-audio.com/Cable/). 
 <br />
 In your computer's sound settings select as audio output the virtual cable.
 Open Pure Data, go into Media and then into Audio Settings and select as input device the VB-Cable.
