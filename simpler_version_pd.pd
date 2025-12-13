@@ -1,4 +1,4 @@
-#N canvas 489 260 1349 600 10;
+#N canvas 379 260 1349 600 10;
 #X obj 50 50 netreceive -u -b 5005;
 #X obj 50 90 oscparse;
 #X obj 50 130 route list;
@@ -73,7 +73,7 @@
 #X obj 674 379 sig~ 1.2;
 #X obj 987 263 sig~ 1.2;
 #X obj 894 220 rev1~ 3;
-#X obj 600 374 *~;
+#X obj 617 421 *~;
 #X connect 0 0 1 0;
 #X connect 0 0 4 0;
 #X connect 1 0 2 0;

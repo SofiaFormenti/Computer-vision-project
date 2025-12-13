@@ -29,13 +29,13 @@ OBJ_THRESHOLD = 15          # pixels differing by more than this are considered 
 capture = cv2.VideoCapture(0)
 
 # left ROI coordinates (top left)
-L_region_top = 40
+L_region_top = 60
 L_region_bottom = L_region_top + ROI_HEIGHT
 L_region_left = 30
 L_region_right = L_region_left + ROI_WIDTH
 
 # right ROI coords (top right)
-R_region_top = 40
+R_region_top = 60
 R_region_bottom = R_region_top + ROI_HEIGHT
 R_region_left = FRAME_WIDTH - ROI_WIDTH - 30
 R_region_right = R_region_left + ROI_WIDTH
