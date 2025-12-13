@@ -1,5 +1,11 @@
-opencv-python
-mediapipe
-pydub
-simpleaudio
-numpy
+numpy>=1.23
+opencv-python>=4.8
+mediapipe>=0.10
+pydub>=0.25
+simpleaudio>=1.0
+python-osc>=1.8
+
+# NOTE:
+# pydub needs FFmpeg installed on your system
+# macOS: brew install ffmpeg
+# Windows: download FFmpeg from https://ffmpeg.org and add it to PATH
