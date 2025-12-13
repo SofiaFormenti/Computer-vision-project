@@ -5,6 +5,7 @@ import cv2
 This notebook tries to implement finger detection by following the workflow 
 of the paper "Convexity Defect Based Hand Gesture Recognition Using OpenCV" (2021) 
 by Md. Najmus Salehin*, Md. Helal An Nahiyan, Fahim Islam Anik
+and also the github repository https://github.com/ishfulthinking/Python-Hand-Gesture-Recognition
 
 Workflow:
 - background subtraction to isolate hands
