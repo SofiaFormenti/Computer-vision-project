@@ -8,7 +8,7 @@ By: Aline Baumberger and Sofia Formenti
 
 This project aims to use hand recognition to make real time dj-set effects by using samples.
 
- ‼️Work in progress‼️
+All the tracks you can choose from were made from scratch by Aline and Nathan! 💿
 
 </div>
 
@@ -33,7 +33,9 @@ Now tick the box next to DSP, you should see "Active audio". Open the file simpl
 <br />
 ![PureData](/img/PD_settings.jpeg)
 
-
+To run the finger count implementation done completely with OpenCV without Mediapipe, simply run Hand recognition.py
+<br />
+Beware: this is not connected to pure data, so sadly you will hear no tracks!😔
 
 ## Architecture
 
@@ -131,8 +133,3 @@ Jazz-style drum loop with light swing, suitable for layering under ambient pads.
 
 
 
-
-
-## Key Features
-
-- **Interactivity**: 
