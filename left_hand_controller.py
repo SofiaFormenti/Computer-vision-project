@@ -9,24 +9,21 @@ class LeftHandController:
     """
     
     # Effect modes mapped to finger counts
-    MODE_VOLUME = 2      # 2 fingers = Volume control (0-100%)
+    MODE_REVERB = 2      # 2 fingers = Reverb wet/dry (0-100%)
     MODE_FILTER = 3      # 3 fingers = Filter cutoff (200-8000 Hz)
-    MODE_REVERB = 4      # 4 fingers = Reverb wet/dry (0-100%)
     MODE_SPEED = 5       # 5 fingers = Playback speed (0.5x-2.0x)
     
     # Effect parameter ranges
     EFFECT_RANGES = {
-        MODE_VOLUME: (0.0, 1.0), # 0-100% as 0.0-1.0
-        MODE_FILTER: (10, 10000),# 200Hz - 8000Hz
         MODE_REVERB: (1.5, 0.05),# 5-100% wet
+        MODE_FILTER: (10, 10000),# 200Hz - 8000Hz
         MODE_SPEED: (4.0, 1.0) # 1x- 4.0x speed
     }
     
     # Effect names for display
     EFFECT_NAMES = {
-        MODE_VOLUME: "VOLUME",
-        MODE_FILTER: "FILTER",
         MODE_REVERB: "REVERB",
+        MODE_FILTER: "FILTER",
         MODE_SPEED: "SPEED"
     }
     
@@ -146,13 +143,16 @@ class LeftHandController:
         Returns:
             True if mode changed, False otherwise
         """
-        # Only update mode if finger count is 2-5
-        if finger_count in [2, 3, 4, 5]:
+        # Only update mode if finger count is 2, 3, or 5
+        if finger_count in [2, 3, 5]:
             if self.current_mode != finger_count:
                 self.current_mode = finger_count
                 self.pinch_history.clear()  # Reset smoothing on mode change
                 print(f"Left hand mode: {self.EFFECT_NAMES[finger_count]}")
                 return True
+        elif finger_count == 4:
+            # 4 fingers is a neutral state, no effect
+            self.current_mode = None
         
         return False
     
@@ -196,7 +196,7 @@ class LeftHandController:
             # Different thresholds for different effects
             if self.current_mode == self.MODE_FILTER:
                 threshold = 100  # 100 Hz change
-            elif self.current_mode in [self.MODE_VOLUME, self.MODE_REVERB]:
+            elif self.current_mode == self.MODE_REVERB:
                 threshold = 0.02  # 2% change
             else:  # SPEED
                 threshold = 0.05  # 0.05x change
