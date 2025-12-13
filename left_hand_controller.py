@@ -17,9 +17,9 @@ class LeftHandController:
     # Effect parameter ranges
     EFFECT_RANGES = {
         MODE_VOLUME: (0.0, 1.0),        # 0-100% as 0.0-1.0
-        MODE_FILTER: (200, 10000),        # 200Hz - 8000Hz
-        MODE_REVERB: (20.0, 40.0),         # 0-100% wet
-        MODE_SPEED: (0.5, 2.0)           # 0.5x - 2.0x speed
+        MODE_FILTER: (10, 10000),        # 200Hz - 8000Hz
+        MODE_REVERB: (80.0, 10.0),         # 0-100% wet
+        MODE_SPEED: (4.0, 1.0)           # 0.5x - 2.0x speed
     }
     
     # Effect names for display
@@ -182,6 +182,9 @@ class LeftHandController:
         
         # Map to effect value
         effect_value = self.map_distance_to_value(smooth_distance, self.current_mode)
+
+       #if self.current_mode == self.MODE_REVERB:
+            #effect_value *= 2.0
         
         # Check if enough time has passed since last send
         current_time = time.time()
