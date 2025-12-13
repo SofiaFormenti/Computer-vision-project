@@ -16,11 +16,18 @@ This project aims to use hand recognition to make real time dj-set effects by us
 
 | Hand | Gesture | 
 |---------|--------|
-|  Left Hand |  Effects control (lowpass, reverb, volume)
+|  Left Hand |  Effects control (lowpass, reverb, speed)
 | 🤏 Pinch & Drag | Change Amplitude of effect |
 | Right Hand |  Instrument and Track choice
 | ✌️ Finger indication | Select Instrument and Track number |
 | ✊ Closed Fist | Confirm Selection |
+
+## How to use
+
+Install the required libraries, [Pure Data](https://puredata.info/downloads) and [VB-Cable](https://vb-audio.com/Cable/). 
+In your computer's sound settings select as audio output the virtual cable.
+Open Pure Data, go into Media and then into Audio Settings and select as input device the VB-Cable.
+Now tick the box next to DSP, you should see "Active audio". Open the file simpler_version_pd.pd run main.py and have fun with our virtual dj-set!
 
 
 
