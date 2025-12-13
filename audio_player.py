@@ -1,20 +1,9 @@
-print(">>> AUDIO PLAYER LOADED FROM:", __file__)
-
-# ---------------------
-# IMPORTS
-# ---------------------
 import os
 import simpleaudio as sa
 import threading
-
-# IMPORT pydub correctement
 from pydub import AudioSegment
-print("AudioSegment imported successfully !")
 
 
-# ---------------------
-# CLASS
-# ---------------------
 class AudioPlayer:
     def __init__(self):
 
@@ -55,19 +44,12 @@ class AudioPlayer:
         self.stop_flags = {}     # key = (instr, track)
 
 
- 
-    # ---------------------
-    # STOP LOOP
-    # ---------------------
     def stop_loop(self, instrument, track):
         key = (instrument, track)
         if key in self.stop_flags:
             print(f"Stopping loop {key}")
             self.stop_flags[key] = True
 
-    # ---------------------
-    # STOP ALL LOOPS
-    # ---------------------
     def stop_all_loops(self):
         """Stop all currently playing loops."""
         print("Stopping all audio loops...")
@@ -83,19 +65,15 @@ class AudioPlayer:
 
         self.active_loops.clear()
 
-    # ---------------------
-    # PLAY LOOP
-    # ---------------------
+
     def play_loop(self, instrument, track):
         key = (instrument, track)
 
-        # Stop previous loop of the same slot
+        # stop the previous loop of the same slot
         self.stop_loop(instrument, track)
 
         fp = self.tracks[instrument][track - 1]
         print(f"▶ Starting loop {key}: {fp}")
-
-        # Load WAV with pydub
         sound = AudioSegment.from_wav(fp)
 
         raw = (

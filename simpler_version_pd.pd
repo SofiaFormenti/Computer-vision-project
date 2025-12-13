@@ -1,4 +1,4 @@
-#N canvas 489 260 1349 600 10;
+#N canvas 379 260 1349 600 10;
 #X obj 50 50 netreceive -u -b 5005;
 #X obj 50 90 oscparse;
 #X obj 50 130 route list;
@@ -9,7 +9,7 @@
 #X obj 146 198 print after_effect;
 #X obj 50 210 unpack f f f;
 #X obj 137 248 s effect_value_raw;
-#X obj 747 122 delwrite~ \$0-buf 5000;
+#X obj 748 105 delwrite~ \$0-buf 5000;
 #X obj 1204 68 r speed_value;
 #X obj 1201 199 phasor~;
 #X obj 1204 96 - 1;
@@ -36,7 +36,7 @@
 #X obj 40 425 s speed_value;
 #X obj 693 40 adc~;
 #X obj 601 194 lop~;
-#X obj 606 275 rev1~ 3;
+#X obj 586 267 rev1~ 3;
 #X obj 746 541 dac~;
 #X obj 675 151 r filter_value, f 21;
 #X obj 679 298 r reverb_value;
@@ -72,8 +72,8 @@
 #X obj 891 260 *~;
 #X obj 890 319 vd~ \$0-buf;
 #X obj 894 366 *~;
-#X obj 674 379 sig~ 0.7;
-#X obj 600 374 *~;
+#X obj 687 383 sig~ 0.7;
+#X obj 600 374 *~ 1;
 #X connect 0 0 1 0;
 #X connect 0 0 4 0;
 #X connect 1 0 2 0;
@@ -105,12 +105,12 @@
 #X connect 32 0 33 0;
 #X connect 33 0 30 1;
 #X connect 35 0 36 0;
-#X connect 35 0 10 0;
 #X connect 36 0 37 0;
 #X connect 37 0 74 0;
 #X connect 39 0 36 1;
 #X connect 39 0 45 0;
 #X connect 40 0 48 0;
+#X connect 40 0 37 1;
 #X connect 41 0 43 0;
 #X connect 42 0 73 0;
 #X connect 43 0 44 0;
@@ -120,7 +120,6 @@
 #X connect 48 0 42 0;
 #X connect 49 0 50 0;
 #X connect 50 0 48 1;
-#X connect 51 0 38 0;
 #X connect 52 0 53 0;
 #X connect 53 0 54 0;
 #X connect 54 0 72 1;
@@ -142,5 +141,4 @@
 #X connect 70 0 71 0;
 #X connect 71 0 72 0;
 #X connect 72 0 51 0;
-#X connect 73 0 74 1;
-#X connect 74 0 51 0;
+#X connect 74 0 38 0;
