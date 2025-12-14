@@ -15,28 +15,27 @@ class AudioPlayer:
         # Registry: instrument -> 4 tracks
         self.tracks = {
             1: [
-                p("samples", "fixed_instr1_piano1.wav"),
-                p("samples", "fixed_instr1_piano2.wav"),
-                p("samples", "fixed_instr1_piano3.wav"),
-                p("samples", "fixed_instr1_piano4.wav"),
+                p("samples", "conv_instr1_piano1.wav"),
+                p("samples", "conv_instr1_piano2.wav"),
+                p("samples", "conv_instr1_piano3.wav"),
+                p("samples", "conv_instr1_piano4.wav"),
             ],
             2: [
-                p("samples", "fixed_instr2_drum1.wav"),
-                p("samples", "fixed_instr2_drum2.wav"),
-                p("samples", "fixed_instr2_drum3.wav"),
-                p("samples", "fixed_instr2_drum4.wav"),
+                p("samples", "conv_instr2_drum1.wav"),
+                p("samples", "conv_instr2_drum2.wav"),
+                p("samples", "conv_instr2_drum3.wav"),
+                p("samples", "conv_instr2_drum4.wav"),
             ],
             3: [
-                p("samples", "fixed_instr3_bass1.wav"),
-                p("samples", "fixed_instr3_bass2.wav"),
-                p("samples", "fixed_instr3_bass3.wav"),
-                p("samples", "fixed_instr3_bass4.wav"),
+                p("samples", "conv_instr3_bass1.wav"),
+                p("samples", "conv_instr3_bass2.wav"),
+                
             ],
             4: [
-                p("samples", "fixed_instr4_guit1.wav"),
-                p("samples", "fixed_instr4_guit2.wav"),
-                p("samples", "fixed_instr4_guit3.wav"),
-                p("samples", "fixed_instr4_guit4.wav"),
+                p("samples", "conv_instr4_guit1.wav"),
+                p("samples", "conv_instr4_guit2.wav"),
+                p("samples", "conv_instr4_guit3.wav"),
+               
             ],
         }
 
