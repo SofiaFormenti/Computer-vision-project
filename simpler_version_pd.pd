@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-#N canvas 1094 236 640 484 10;
-=======
 #N canvas 641 186 1167 672 10;
->>>>>>> 8051cdaf0a755a63338fad55e7fb193cba19ed7a
 #X obj 50 50 netreceive -u -b 5005;
 #X obj 50 90 oscparse;
 #X obj 50 130 route list;
@@ -77,18 +73,11 @@
 #X obj 674 379 sig~ 1.2;
 #X obj 987 263 sig~ 1.2;
 #X obj 894 220 rev1~ 3;
-<<<<<<< HEAD
-#X obj 632 405 *~;
-=======
->>>>>>> 8051cdaf0a755a63338fad55e7fb193cba19ed7a
 #X obj 827 541 writesf~ 2;
 #X msg 830 439 open session.wav;
 #X msg 843 470 start;
 #X msg 847 498 stop;
-<<<<<<< HEAD
-=======
 #X obj 632 405 *~;
->>>>>>> 8051cdaf0a755a63338fad55e7fb193cba19ed7a
 #X connect 0 0 1 0;
 #X connect 0 0 4 0;
 #X connect 1 0 2 0;
@@ -134,15 +123,9 @@
 #X connect 47 0 41 0;
 #X connect 48 0 49 0;
 #X connect 49 0 47 1;
-<<<<<<< HEAD
-#X connect 50 0 37 0;
-#X connect 50 0 75 0;
-#X connect 50 0 75 1;
-=======
 #X connect 50 0 74 0;
 #X connect 50 0 74 1;
 #X connect 50 0 37 0;
->>>>>>> 8051cdaf0a755a63338fad55e7fb193cba19ed7a
 #X connect 51 0 52 0;
 #X connect 52 0 53 0;
 #X connect 53 0 69 1;
@@ -162,16 +145,6 @@
 #X connect 67 0 68 0;
 #X connect 68 0 69 0;
 #X connect 69 0 50 0;
-<<<<<<< HEAD
-#X connect 70 0 74 0;
-#X connect 71 0 74 1;
-#X connect 72 0 67 1;
-#X connect 73 0 67 0;
-#X connect 74 0 50 0;
-#X connect 76 0 75 0;
-#X connect 77 0 75 0;
-#X connect 78 0 75 0;
-=======
 #X connect 70 0 78 0;
 #X connect 71 0 78 1;
 #X connect 72 0 67 1;
@@ -180,4 +153,3 @@
 #X connect 76 0 74 0;
 #X connect 77 0 74 0;
 #X connect 78 0 50 0;
->>>>>>> 8051cdaf0a755a63338fad55e7fb193cba19ed7a
