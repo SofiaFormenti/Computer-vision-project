@@ -12,6 +12,10 @@ All the tracks you can choose from were made from scratch by Aline and Nathan! �
 
 </div>
 
+## Demo
+
+![Demo](https://youtu.be/hevnI0u5mno?si=fUReQ7XClMofbMyP)
+
 ## Features
 
 | Hand | Gesture | 
@@ -41,19 +45,15 @@ Beware: this is not connected to pure data, so sadly you will hear no tracks!�
 
 ```
 Computer-vision-project/
-├── Hand recognition.py             # opencv implementation, run this file for the convex hull implementation
-├── audio_player.py
-├── finger_count.py                 # Right hand instrument and track selection
-├── left_hand_controller.py         # Left hand Effects controller with pinch
+├── Hand recognition.py             # opencv implementation, run this file for the convexity defect-based implementation
+├── audio_player.py                 # oversees track play control
+├── finger_count.py                 # right hand instrument and track selection
+├── left_hand_controller.py         # left hand effects controller with pinch
 ├── main.py                         # run this for the Mediapipe implementation
 ├── pd_sender.py
 ├── prog_test.pd
 ├── requirements.txt
 ├── test.pd
-├── __pycache__/
-│   ├── finger_count.cpython-312.pyc 
-│   ├── left_hand_controller.cpython-312.py
-│   └── pd_sender.cpython-312.pyc
 └── samples/
    ├──conv_instr1_piano1.wav
    ├──conv_instr1_piano2.wav
