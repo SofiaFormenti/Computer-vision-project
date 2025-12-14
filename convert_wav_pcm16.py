@@ -19,7 +19,7 @@ if not os.path.exists(FFMPEG):
 for filename in os.listdir(SAMPLES_DIR):
     if filename.lower().endswith(".wav"):
         src = os.path.join(SAMPLES_DIR, filename)
-        dst = os.path.join(SAMPLES_DIR, "fixed_" + filename)
+        dst = os.path.join(SAMPLES_DIR, "conv_" + filename)
 
         print(f"→ Conversion : {filename}")
 

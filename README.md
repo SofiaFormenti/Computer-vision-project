@@ -55,81 +55,49 @@ Computer-vision-project/
 │   ├── left_hand_controller.cpython-312.py
 │   └── pd_sender.cpython-312.pyc
 └── samples/
-   ├──instr1_piano1.wav
-   ├──instr1_piano2.wav
-   └──instr1_piano3.wav
-   └──instr1_piano4.wav
-   └──instr2_drum1.wav
-   └──instr2_drum2.wav
-   └──instr2_drum3.wav
-   └──instr2_drum4.wav
-   └──instr3_bass1.wav
-   └──instr3_bass2.wav
+   ├──conv_instr1_piano1.wav
+   ├──conv_instr1_piano2.wav
+   └──conv_instr1_piano3.wav
+   └──conv_instr1_piano4.wav
+   └──conv_instr2_drum1.wav
+   └──conv_instr2_drum2.wav
+   └──conv_instr2_drum3.wav
+   └──conv_instr2_drum4.wav
+   └──conv_instr3_bass1.wav
+   └──conv_instr3_bass2.wav
+   └──conv_instr4_guit1.wav
+   └──conv_instr4_guit2.wav
+   └──conv_instr4_guit3.wav
 ```
+
+Audio files are here converted to WAV PCM 16-bit format to ensure a standard, uncompressed, and widely supported representation.
+This guarantees consistent encoding and sampling rates across all files, preventing compatibility issues during audio processing in Pure Data.
+
+If new audio files are added from digital audio workstations (such as Ableton Live), it is recommended to convert them beforehand so that all audio data remains consistent !
+
+
+
 
 ## Track Overview
 
+All tracks share the same key (E minor) and the same tempo (120 BPM) to ensure rythmic and tonal coherence.
+However, not all tracks fit equally well together, as the goal was to allow combinations across 4 piano tracks, 4 drum tracks, 3 guitar tracks, and 2 bass tracks (13 tracks total), which makes achieving perfect compatibility non-trivial.
 
-## Instrument 1 - Piano 
+For this reason, priority is given to drum, guitar, and piano tracks that blend particularly well together, all of which were created by Aline and Nathan using Ableton Live.
 
-**Track 1:** Ambiant chords  
-**BPM:** 120  
-**Tags:** ambient, soft, floaty  
-
-**Track 2:** Arpeggio  
-**BPM:** 120  
-**Tags:** - 
-
-**Track 3:** Ambiant chords  
-**BPM:** 120  
-**Tags:** -
-
-**Track 4:** Ambiant chords  
-**BPM:** 120  
-**Tags:** -
-
----
-
-##  Instrument 2 - Drums
-
-**Track 1:** Energetic  
-**BPM:** 95  
-**Tags:** drums, rhythm  
-**Description:**  
-Jazz-style drum loop with light swing, suitable for layering under ambient pads.
-
-**Track 2:** Energetic  
-**BPM:** 95  
-**Tags:** drums, rhythm  
-**Description:**  
-
-
-**Track 3:** Energetic  
-**BPM:** 95  
-**Tags:** drums, rhythm  
-**Description:**  
-
-
-**Track 4:** Energetic  
-**BPM:** 95  
-**Tags:** drums, rhythm  
-**Description:**  
-
-
----
-
-##  Instrument 3 - bass
-
-**Track 1:** Energetic  
-**BPM:** 95  
-**Tags:** drums, rhythm  
-**Description:** 
-
-
-**Track 2:** Energetic  
-**BPM:** 95  
-**Tags:** drums, rhythm  
-**Description:**  
-
-
-
+| Instrument | Track | Style / Role        | Description                  |
+|------------|-------|---------------------|-----------------------|
+| Piano      | 1     | Ambient chords      | Sustained atmophseric and ambiant chords ambient |
+| Piano      | 2     | Arpeggio            |     Simple  distorted arpeggio chords progression                    |
+| Piano      | 3     | Distorted chords       |          Sparse chord progression with reverb/ texture             |
+| Piano      | 4     | Rythmic arpeggio chords      |   Fast and stacatto arpeggio with dynamic layering                     |
+| Drums      | 1     | Rythmic           | Tight rythmic pattern with kick, hihat and snare      |
+| Drums      | 2     | Slower, groovier           | Jazz-inspired drum lopp with swing, light hihat and reverbed snares        |
+| Drums      | 3     | Slowed Drum n Bass           | Percussive loop with breaks and syncopation, slowed jungle type DnB         |
+| Drums      | 4     | Energetic           | Percussive pattern, more afro style with percs and rims         |
+| Bass       | 1     | Dark, electronic arpeggio           |   Electronic Acid type techno pattern       |
+| Bass       | 2     | Distorted simple bass line       | Distorted sparse  descending bass linegroove          |
+| Guitar     | 1     |    Bright electric guitare arpeggio                 | Clean electric guitar arpeggios with modulation effects               |
+| Guitar     | 2     |      Slower guitar chords               | Electric guitar chords with passing tones                |
+| Guitar     | 3     |   Distorted guitar                  | Descending electric guitar pattern, rock like              |
+"""
