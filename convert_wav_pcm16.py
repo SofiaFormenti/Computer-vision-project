@@ -19,7 +19,11 @@ if not os.path.exists(FFMPEG):
 for filename in os.listdir(SAMPLES_DIR):
     if filename.lower().endswith(".wav"):
         src = os.path.join(SAMPLES_DIR, filename)
+<<<<<<< HEAD
         dst = os.path.join(SAMPLES_DIR, "conv_" + filename)
+=======
+        dst = os.path.join(SAMPLES_DIR, "conv_" + filename)
+>>>>>>> 8051cdaf0a755a63338fad55e7fb193cba19ed7a
 
         print(f"→ Conversion : {filename}")
 
@@ -37,5 +41,5 @@ for filename in os.listdir(SAMPLES_DIR):
 
 print("------------------------------------")
 print("✔ Conversion terminée !")
-print("Les fichiers 'fixed_xxx.wav' sont prêts.")
+print("Les fichiers 'conv_xxx.wav' sont prêts.")
 print("Révérifie qu'ils fonctionnent puis remplace les anciens fichiers.")
