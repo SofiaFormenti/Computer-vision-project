@@ -12,6 +12,10 @@ All the tracks you can choose from were made from scratch by Aline and Nathan! ð
 
 </div>
 
+## Demo
+
+![Demo](Demo.mp4)
+
 ## Features
 
 | Hand | Gesture | 
