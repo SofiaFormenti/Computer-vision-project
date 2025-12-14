@@ -4,7 +4,7 @@ import mediapipe as mp
 
 """
 The following code aims at leveraging the Gesture Recognizer of Mediapipe Solutions, an open source Google project
-that operates on image data with a machine learning (ML) model, and accepts either static data or a continuous stream. 
+that operates on image data with a machine learning model, and accepts either static data or a continuous stream. 
 The task outputs hand landmarks in image coordinates, hand landmarks in world coordinates, handedness (left/right hand), 
 and the hand gesture categories of multiple hands.
 

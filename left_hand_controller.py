@@ -13,6 +13,13 @@ class LeftHandController:
     MODE_FILTER = 3      # 3 fingers = Filter cutoff (200-8000 Hz)
     MODE_SPEED = 5       # 5 fingers = Playback speed (0.5x-2.0x)
     
+    # OSC identifiers sent to Pure Data (must match PD patch)
+    OSC_EFFECT_IDS = {
+        MODE_REVERB: 4,  # Reverb is controlled by OSC ID 4
+        MODE_FILTER: 3,  # Filter is controlled by OSC ID 3
+        MODE_SPEED: 5,   # Speed is controlled by OSC ID 5
+    }
+    
     # Effect parameter ranges
     EFFECT_RANGES = {
         MODE_REVERB: (1.5, 0.05),# 5-100% wet
@@ -222,12 +229,15 @@ class LeftHandController:
             effect_type: Effect mode (2-5)
             value: Effect parameter value
         """
+        # Get the correct OSC identifier for the current effect mode
+        osc_id = self.OSC_EFFECT_IDS[effect_type]
+        
         # Send OSC message: /effect [track] [effect_type] [value]
-        self.pd_sender.send_effect(track, effect_type, value)
+        self.pd_sender.send_effect(track, osc_id, value)
         
         # Print for debugging
         effect_name = self.EFFECT_NAMES[effect_type]
-        print(f"→ Track {track} | {effect_name}: {value:.2f}")
+        print(f"→ Track {track} | {effect_name} (OSC ID: {osc_id}): {value:.2f}")
     
     def get_display_info(self):
         """
